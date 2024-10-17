@@ -15,7 +15,7 @@ const Profile = () => {
             {/* Profile Image */}
             <View className="relative">
               <Image
-                source={icons.userPlaceholder}
+                source={icons.person}
                 className="w-32 h-32 rounded-full border-4 border-white"
               />
               {/* Rating Badge */}
