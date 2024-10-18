@@ -69,7 +69,10 @@ const Jobs = () => {
       <View className="bg-primary-500 py-6 px-6 rounded-b-3xl">
         <Text className="text-white text-2xl font-bold">Job History</Text>
       </View>
-      <ScrollView className="flex-1 px-4 py-4">
+      <ScrollView
+        className="flex-1 px-4 py-4"
+        showsHorizontalScrollIndicator={false}
+      >
         {/* Incoming Job Requests */}
         <View className="bg-white rounded-xl shadow-md p-4 mb-4">
           <Text className="text-lg font-semibold mb-3">Incoming Requests</Text>
