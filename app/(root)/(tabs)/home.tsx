@@ -55,16 +55,16 @@ const Home = () => {
         </View>
 
         {/* Quick Actions */}
-        <View className="bg-white rounded-xl shadow-lg p-5 mb-6">
+        <View className="bg-white rounded-xl shadow-lg p-2 mb-6">
           <Text className="text-lg font-semibold mb-4">Quick Actions</Text>
           <View className="flex-row space-x-4">
-            <TouchableOpacity className="bg-primary-500 rounded-full p-4 flex-1 items-center shadow-sm">
+            <TouchableOpacity className="bg-primary-500 rounded-md p-3 flex-1 items-center shadow-sm">
               <Text className="text-white font-semibold">View Requests</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-primary-500 rounded-full p-4 flex-1 items-center shadow-sm">
+            <TouchableOpacity className="bg-primary-500 rounded-md p-3 flex-1 items-center shadow-sm">
               <Text className="text-white font-semibold">Check Earnings</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-primary-500 rounded-full p-4 flex-1 items-center shadow-sm">
+            <TouchableOpacity className="bg-primary-500 rounded-md p-3 flex-1 items-center shadow-sm">
               <Text className="text-white font-semibold">Profile</Text>
             </TouchableOpacity>
           </View>
