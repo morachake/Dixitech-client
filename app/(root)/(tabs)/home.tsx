@@ -35,7 +35,9 @@ const Home = () => {
           </TouchableOpacity>
           <TouchableOpacity className="bg-green-500 flex-1 rounded-xl p-5 shadow-md">
             <Text className="text-white text-lg font-semibold">Earnings</Text>
-            <Text className="text-white text-3xl mt-2 font-bold">KSh 15,000</Text>
+            <Text className="text-white text-3xl mt-2 font-bold">
+              KSh 15,000
+            </Text>
           </TouchableOpacity>
         </View>
 

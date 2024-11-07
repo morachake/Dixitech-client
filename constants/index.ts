@@ -23,6 +23,7 @@ import selectedMarker from "@/assets/icons/selected-marker.png";
 import star from "@/assets/icons/star.png";
 import target from "@/assets/icons/target.png";
 import to from "@/assets/icons/to.png";
+import facebook from "@/assets/icons/facebook.png";
 import check from "@/assets/images/check.png";
 import getStarted from "@/assets/images/get-started.png";
 import message from "@/assets/images/message.png";
@@ -31,19 +32,18 @@ import onboarding1 from "@/assets/images/onboarding1.png";
 import onboarding2 from "@/assets/images/onboarding2.png";
 import onboarding3 from "@/assets/images/onboarding3.png";
 import signUpCar from "@/assets/images/signup-car.png";
-import dextechLogo from "@/assets/images/dexTechLogo.png"
-import phone from "@/assets/icons/phone.png"
-import history from "@/assets/icons/history.png"
-import notifications from "@/assets/icons/notification.png"
-import capenter from "@/assets/images/capenter.jpg"
-import electrician from "@/assets/images/electrician.jpg"
-import painter from "@/assets/images/painter.jpg"
-import plumber from "@/assets/images/plumber.jpg"
-import repairtools from "@/assets/images/repairtools.jpg"
-import tools from "@/assets/images/tools.jpg"
-import welder from "@/assets/images/welder.jpg"
-import welding from "@/assets/images/welding.jpg"
-
+import dextechLogo from "@/assets/images/dexTechLogo.png";
+import phone from "@/assets/icons/phone.png";
+import history from "@/assets/icons/history.png";
+import notifications from "@/assets/icons/notification.png";
+import capenter from "@/assets/images/capenter.jpg";
+import electrician from "@/assets/images/electrician.jpg";
+import painter from "@/assets/images/painter.jpg";
+import plumber from "@/assets/images/plumber.jpg";
+import repairtools from "@/assets/images/repairtools.jpg";
+import tools from "@/assets/images/tools.jpg";
+import welder from "@/assets/images/welder.jpg";
+import welding from "@/assets/images/welding.jpg";
 export const images = {
   onboarding1,
   onboarding2,
@@ -61,7 +61,7 @@ export const images = {
   repairtools,
   tools,
   welder,
-  welding
+  welding,
 };
 
 export const icons = {
@@ -92,7 +92,8 @@ export const icons = {
   to,
   phone,
   notifications,
-  history
+  history,
+  facebook,
 };
 
 export const onboarding = [
