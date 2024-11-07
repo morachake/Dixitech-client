@@ -18,7 +18,7 @@ declare interface InputFieldProps extends TextInputProps {
   iconStyle?: string;
   className?: string;
 }
-export interface ServiceProviderRegistration {
+export interface User {
   name: string;
   email: string;
   phone_number: string;
@@ -26,4 +26,24 @@ export interface ServiceProviderRegistration {
   service_types: number[];
   provider_type: "Individual" | "Company";
   password: string;
+}
+
+
+export interface AuthState {
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+}
+
+export interface AuthContextData {
+  user: User | null;
+  loading: boolean;
+  error: string | null;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (userData: User) => Promise<void>;
+  signOut: () => Promise<void>;
+  googelSignIn: () => Promise<void>;
+  facebookSignIn: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  updateProfile: (data: Partial<User>) => Promise<void>;
 }
