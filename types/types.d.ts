@@ -28,8 +28,8 @@ export interface User {
   password: string;
 }
 
-
 export interface AuthState {
+  tokens: any;
   user: User | null;
   loading: boolean;
   error: string | null;

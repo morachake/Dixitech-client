@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import 'react-native-reanimated';
+import React, { useEffect } from "react";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import "react-native-reanimated";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,7 +16,6 @@ export default function RootLayout() {
     Jakarta: require("../assets/fonts/PlusJakartaSans-Regular.ttf"),
     "Jakarta-SemiBold": require("../assets/fonts/PlusJakartaSans-SemiBold.ttf"),
   });
-
 
   useEffect(() => {
     if (loaded) {
@@ -35,6 +33,6 @@ export default function RootLayout() {
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="(root)" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
-  </Stack>
+    </Stack>
   );
 }
