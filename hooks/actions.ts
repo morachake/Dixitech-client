@@ -19,10 +19,14 @@ export const removeUser = (): AuthAction => ({
   type: "REMOVE_USER",
 });
 
-export const setTokens = (tokens: any): AuthAction => ({
+export const setTokens = (tokens: {
+  access: string;
+  refresh: string;
+}): AuthAction => ({
   type: "SET_TOKENS",
   payload: tokens,
 });
+
 export const removeTokens = (): AuthAction => ({
   type: "REMOVE_TOKENS",
 });

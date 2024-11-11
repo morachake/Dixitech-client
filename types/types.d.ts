@@ -38,11 +38,12 @@ export interface AuthState {
 export interface AuthContextData {
   user: User | null;
   loading: boolean;
+  tokens: { access: string; refresh: string } | null;
   error: string | null;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (userData: User) => Promise<void>;
   signOut: () => Promise<void>;
-  googelSignIn: () => Promise<void>;
+  googleSignIn: () => Promise<void>;
   facebookSignIn: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updateProfile: (data: Partial<User>) => Promise<void>;
