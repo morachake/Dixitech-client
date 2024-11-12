@@ -27,7 +27,7 @@ const InputField = ({
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="my-2 w-full">
+        <View className="my-1 w-full">
           <Text className={`text-md font-JakartaSemiBold mb-1 ${labelStyle}`}>
             {label}
           </Text>

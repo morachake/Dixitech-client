@@ -23,13 +23,13 @@ export interface User {
   email: string;
   phone_number: string;
   town: string;
-  service_types: number[];
-  provider_type: "Individual" | "Company";
+  service_types: string[];
+  provider_type: "Individual" | "Entity";
   password: string;
 }
 
 export interface AuthState {
-  tokens: any;
+  tokens: { access: string; refresh: string } | null;
   user: User | null;
   loading: boolean;
   error: string | null;

@@ -1,170 +1,291 @@
-import CustomButton from "@/components/customButton";
-import InputField from "@/components/inputField";
-import Oauth from "@/components/oAuth";
-import { icons, images } from "@/constants";
-import { Link } from "expo-router";
 import React, { useState } from "react";
 import {
-  Image,
-  Modal,
-  Pressable,
-  Text,
-  TouchableOpacity,
   View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Link, useRouter } from "expo-router";
+import DropDownPicker from "react-native-dropdown-picker";
+import Oauth from "@/components/oAuth";
+import { images } from "@/constants";
+import { useAuth } from "@/context/Auth";
+import { User } from "@/types/types";
 
-const SignUp = () => {
-  const [form, setForm] = useState({
-    userName: "",
+const userTypes = [
+  { label: "Individual", value: "Individual" },
+  { label: "Entity", value: "Entity" },
+];
+
+const services = [
+  { label: "Plumbing", value: 1 },
+  { label: "Carpentry", value: 2 },
+  { label: "Electrical Work", value: 3 },
+];
+
+export default function Component() {
+  const { signUp, loading, error } = useAuth();
+  const router = useRouter();
+
+  const [form, setForm] = useState<User>({
+    name: "",
     email: "",
-    phone: "",
+    phone_number: "",
     password: "",
-    confirmPassword: "",
-    userType: "",
-    location: "",
-    serviceProvided: "",
+    provider_type: "",
+    town: "",
+    service_types: [],
   });
 
-  const [userTypeModalVisible, setUserTypeModalVisible] = useState(false);
-  const [serviceModalVisible, setServiceModalVisible] = useState(false);
+  const [openProviderType, setOpenProviderType] = useState(false);
+  const [openServices, setOpenServices] = useState(false);
+  const [formErrors, setFormErrors] = useState<
+    Partial<Record<keyof User, string>>
+  >({});
 
-  const userTypes = ["Individual", "Entity"];
-  const services = ["Plumbing", "Carpentry", "Electrical Work"];
+  const updateForm = (key: keyof User, value: any) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    setFormErrors((prev) => ({ ...prev, [key]: "" }));
+  };
+
+  const validateForm = () => {
+    const errors: Partial<Record<keyof User, string>> = {};
+    Object.entries(form).forEach(([key, value]) => {
+      if (value === "" || (Array.isArray(value) && value.length === 0)) {
+        errors[key as keyof User] = `${key.replace("_", " ")} is required`;
+      }
+    });
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSignUp = async () => {
+    if (!validateForm()) return;
+
+    try {
+      await signUp({
+        ...form,
+        service_types: form.service_types.map(Number),
+      });
+      router.replace("/home");
+    } catch (error) {
+      console.error("Sign Up Error:", error);
+    }
+  };
 
   return (
-    <SafeAreaView className="flex-1 justify-center bg-white p-4">
-      <Image
-        source={images.dextechLogo}
-        className="w-full h-20 mt-8"
-        resizeMode="contain"
-      />
-      <Text className="text-xl font-bold text-center">
-        Create a new account
-      </Text>
-      <View>
-        <Text className="mb-2">Are you an Individual or an Entity?</Text>
-        <TouchableOpacity
-          onPress={() => setUserTypeModalVisible(true)}
-          className="p-2 bg-gray-200 rounded-lg mt-2 border border-blue-300"
+    <SafeAreaView className="flex-1 bg-white">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <Image
+          source={images.dextechLogo}
+          className="w-4/5 h-16 mx-auto my-8"
+          resizeMode="contain"
+          accessibilityLabel="Dextech Logo"
+        />
+        <Text className="text-xl font-bold text-center mb-1">
+          Create a new account
+        </Text>
+        <ScrollView
+          className="flex-1 px-4"
+          showsVerticalScrollIndicator={false}
         >
-          <Text>{form.userType || "Select User Type"}</Text>
-        </TouchableOpacity>
-        <Modal transparent visible={userTypeModalVisible} animationType="fade">
-          <View className="flex-1 justify-center items-center bg-black bg-opacity-20">
-            <View className="bg-white w-3/4 rounded-lg p-4">
-              {userTypes.map((type) => (
-                <Pressable
-                  key={type}
-                  onPress={() => {
-                    setForm((prevForm) => ({ ...prevForm, userType: type }));
-                    setUserTypeModalVisible(false);
-                  }}
-                  className="py-2 border-b border-gray-300"
-                >
-                  <Text>{type}</Text>
-                </Pressable>
-              ))}
-              <Pressable
-                onPress={() => setUserTypeModalVisible(false)}
-                className="py-2 items-center"
-              >
-                <Text className="text-blue-700 font-bold">Cancel</Text>
-              </Pressable>
-            </View>
+          <View className="mb-1 z-20">
+            <Text className="mb-1">Are you an Individual or an Entity?</Text>
+            <DropDownPicker
+              open={openProviderType}
+              value={form.provider_type}
+              items={userTypes}
+              setOpen={setOpenProviderType}
+              setValue={(callback) => {
+                const value = callback(form.provider_type);
+                updateForm("provider_type", value);
+                setOpenProviderType(false);
+              }}
+              placeholder={
+                form.provider_type ||
+                formErrors.provider_type ||
+                "Select Provider Type"
+              }
+              className={`border ${formErrors.provider_type ? "border-red-500" : "border-gray-300"} rounded-lg`}
+              containerStyle={{ zIndex: 3000 }}
+              dropDownContainerStyle={{ borderColor: "#ccc" }}
+            />
+            {formErrors.provider_type && (
+              <Text className="text-red-500 text-sm mt-1">
+                {formErrors.provider_type}
+              </Text>
+            )}
           </View>
-        </Modal>
-      </View>
-      <View>
-        <Text className="mb-2">Select Services Provided</Text>
-        <TouchableOpacity
-          onPress={() => setServiceModalVisible(true)}
-          className="p-2 bg-gray-200 rounded-lg border border-blue-300 mt-2"
-        >
-          <Text>{form.serviceProvided || "Select Service"}</Text>
-        </TouchableOpacity>
-        <Modal transparent visible={serviceModalVisible} animationType="fade">
-          <View className="flex-1 justify-center items-center bg-black bg-opacity-20">
-            <View className="bg-white w-3/4 rounded-lg p-4">
-              {services.map((service) => (
-                <Pressable
-                  key={service}
-                  onPress={() => {
-                    setForm((prevForm) => ({
-                      ...prevForm,
-                      serviceProvided: service,
-                    }));
-                    setServiceModalVisible(false);
-                  }}
-                  className="py-2 border-b border-gray-300"
-                >
-                  <Text>{service}</Text>
-                </Pressable>
-              ))}
-              <Pressable
-                onPress={() => setServiceModalVisible(false)}
-                className="py-2 items-center"
-              >
-                <Text className="text-blue-700 font-bold">Cancel</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-      </View>
-      <View>
-        <InputField
-          placeholder="Enter name"
-          icon={icons.person}
-          value={form.userName}
-          onChangeText={(text) =>
-            setForm((prevForm) => ({ ...prevForm, userName: text }))
-          }
-        />
-        <InputField
-          placeholder="Enter email"
-          icon={icons.email}
-          value={form.email}
-          onChangeText={(text) =>
-            setForm((prevForm) => ({ ...prevForm, email: text }))
-          }
-        />
-        <InputField
-          placeholder="Enter phone number"
-          icon={icons.phone}
-          value={form.phone}
-          onChangeText={(text) =>
-            setForm((prevForm) => ({ ...prevForm, phone: text }))
-          }
-        />
-        <InputField
-          placeholder="Town"
-          icon={icons.point}
-          value={form.location}
-          onChangeText={(text) =>
-            setForm((prevForm) => ({ ...prevForm, location: text }))
-          }
-        />
-        <InputField
-          placeholder="Confirm your password"
-          icon={icons.lock}
-          value={form.confirmPassword}
-          onChangeText={(text) =>
-            setForm((prevForm) => ({ ...prevForm, confirmPassword: text }))
-          }
-        />
 
-        <CustomButton title="Sign Up" className="mt-2" />
-        <Oauth />
-        <Link
-          href="/(auth)/sign-in"
-          className="text-md text-center text-gray-500"
-        >
-          <Text className="text-black">Already Have an Account?</Text>
-          <Text className="text-primary-500"> Sign In</Text>
-        </Link>
-      </View>
+          <View className="mb-1 z-10">
+            <Text className="mb-2">Select Services Provided</Text>
+            <DropDownPicker
+              open={openServices}
+              value={form.service_types}
+              items={services}
+              setOpen={setOpenServices}
+              setValue={(callback) => {
+                const value = callback(form.service_types);
+                updateForm("service_types", value);
+                setOpenServices(false);
+              }}
+              multiple={true}
+              min={0}
+              max={3}
+              placeholder={
+                form.service_types.length > 0
+                  ? form.service_types
+                      .map((id) => services.find((s) => s.value === id)?.label)
+                      .join(", ")
+                  : formErrors.service_types || "Select Services"
+              }
+              className={`border ${formErrors.service_types ? "border-red-500" : "border-gray-300"} rounded-lg`}
+              containerStyle={{ zIndex: 2000 }}
+              dropDownContainerStyle={{ borderColor: "#ccc" }}
+            />
+            {formErrors.service_types && (
+              <Text className="text-red-500 text-sm mt-1">
+                {formErrors.service_types}
+              </Text>
+            )}
+          </View>
+
+          <View className="mb-2">
+            <TextInput
+              placeholder={formErrors.name ? "Name is required" : "Enter name"}
+              value={form.name}
+              onChangeText={(text) => updateForm("name", text)}
+              className={`border p-3 rounded-lg ${
+                formErrors.name
+                  ? "border-red-500 placeholder-red-500"
+                  : "border-gray-300"
+              }`}
+            />
+            {formErrors.name && (
+              <Text className="text-red-500 text-sm mt-1">
+                {formErrors.name}
+              </Text>
+            )}
+          </View>
+
+          <View className="mb-2">
+            <TextInput
+              placeholder={
+                formErrors.email ? "Email is required" : "Enter email"
+              }
+              value={form.email}
+              onChangeText={(text) => updateForm("email", text)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              className={`border p-3 rounded-lg ${
+                formErrors.email
+                  ? "border-red-500 placeholder-red-500"
+                  : "border-gray-300"
+              }`}
+            />
+            {formErrors.email && (
+              <Text className="text-red-500 text-sm mt-1">
+                {formErrors.email}
+              </Text>
+            )}
+          </View>
+
+          <View className="mb-2">
+            <TextInput
+              placeholder={
+                formErrors.phone_number
+                  ? "Phone number is required"
+                  : "Enter phone number"
+              }
+              value={form.phone_number}
+              onChangeText={(text) => updateForm("phone_number", text)}
+              keyboardType="phone-pad"
+              className={`border p-3 rounded-lg ${
+                formErrors.phone_number
+                  ? "border-red-500 placeholder-red-500"
+                  : "border-gray-300"
+              }`}
+            />
+            {formErrors.phone_number && (
+              <Text className="text-red-500 text-sm mt-1">
+                {formErrors.phone_number}
+              </Text>
+            )}
+          </View>
+
+          <View className="mb-2">
+            <TextInput
+              placeholder={formErrors.town ? "Town is required" : "Enter town"}
+              value={form.town}
+              onChangeText={(text) => updateForm("town", text)}
+              className={`border p-3 rounded-lg ${
+                formErrors.town
+                  ? "border-red-500 placeholder-red-500"
+                  : "border-gray-300"
+              }`}
+            />
+            {formErrors.town && (
+              <Text className="text-red-500 text-sm mt-1">
+                {formErrors.town}
+              </Text>
+            )}
+          </View>
+
+          <View className="mb-2">
+            <TextInput
+              placeholder={
+                formErrors.password ? "Password is required" : "Enter password"
+              }
+              value={form.password}
+              onChangeText={(text) => updateForm("password", text)}
+              secureTextEntry
+              className={`border p-3 rounded-lg ${
+                formErrors.password
+                  ? "border-red-500 placeholder-red-500"
+                  : "border-gray-300"
+              }`}
+            />
+            {/* {formErrors.password && (
+              <Text className="text-red-500 text-sm mt-1">
+                {formErrors.password}
+              </Text>
+            )} */}
+          </View>
+
+          {error && (
+            <Text className="text-red-500 text-center mb-4">{error}</Text>
+          )}
+
+          <TouchableOpacity
+            onPress={handleSignUp}
+            disabled={loading}
+            className={`w-full h-12 rounded-lg justify-center items-center mb-6 ${
+              loading ? "bg-gray-400" : "bg-primary-700"
+            }`}
+          >
+            <Text className="text-white text-lg font-semibold">
+              {loading ? "Signing Up..." : "Sign Up"}
+            </Text>
+          </TouchableOpacity>
+
+          <Oauth />
+          <Link
+            href="/(auth)/sign-in"
+            className="text-md text-center text-gray-500 mt-4 mb-8"
+          >
+            <Text className="text-black">Already Have an Account?</Text>
+            <Text className="text-primary-500"> Sign In</Text>
+          </Link>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
-
-export default SignUp;
+}
