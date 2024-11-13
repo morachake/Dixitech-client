@@ -39,7 +39,7 @@ export default function Component() {
     password: "",
     provider_type: "",
     town: "",
-    service_types: [],
+    // service_types: [],
   });
 
   const [openProviderType, setOpenProviderType] = useState(false);
@@ -70,7 +70,7 @@ export default function Component() {
     try {
       await signUp({
         ...form,
-        service_types: form.service_types.map(Number),
+        // service_types: form.service_types.map(Number),
       });
       router.replace("/home");
     } catch (error) {
@@ -109,23 +109,14 @@ export default function Component() {
                 updateForm("provider_type", value);
                 setOpenProviderType(false);
               }}
-              placeholder={
-                form.provider_type ||
-                formErrors.provider_type ||
-                "Select Provider Type"
-              }
+              placeholder={formErrors.provider_type || "Select Provider Type"}
               className={`border ${formErrors.provider_type ? "border-red-500" : "border-gray-300"} rounded-lg`}
               containerStyle={{ zIndex: 3000 }}
               dropDownContainerStyle={{ borderColor: "#ccc" }}
             />
-            {formErrors.provider_type && (
-              <Text className="text-red-500 text-sm mt-1">
-                {formErrors.provider_type}
-              </Text>
-            )}
           </View>
 
-          <View className="mb-1 z-10">
+          <View className="mb-4 z-10">
             <Text className="mb-2">Select Services Provided</Text>
             <DropDownPicker
               open={openServices}
@@ -140,27 +131,16 @@ export default function Component() {
               multiple={true}
               min={0}
               max={3}
-              placeholder={
-                form.service_types.length > 0
-                  ? form.service_types
-                      .map((id) => services.find((s) => s.value === id)?.label)
-                      .join(", ")
-                  : formErrors.service_types || "Select Services"
-              }
+              placeholder={formErrors.service_types || "Select Services"}
               className={`border ${formErrors.service_types ? "border-red-500" : "border-gray-300"} rounded-lg`}
               containerStyle={{ zIndex: 2000 }}
               dropDownContainerStyle={{ borderColor: "#ccc" }}
             />
-            {formErrors.service_types && (
-              <Text className="text-red-500 text-sm mt-1">
-                {formErrors.service_types}
-              </Text>
-            )}
           </View>
 
-          <View className="mb-2">
+          <View className="mb-4">
             <TextInput
-              placeholder={formErrors.name ? "Name is required" : "Enter name"}
+              placeholder={formErrors.name || "Enter name"}
               value={form.name}
               onChangeText={(text) => updateForm("name", text)}
               className={`border p-3 rounded-lg ${
@@ -169,18 +149,11 @@ export default function Component() {
                   : "border-gray-300"
               }`}
             />
-            {formErrors.name && (
-              <Text className="text-red-500 text-sm mt-1">
-                {formErrors.name}
-              </Text>
-            )}
           </View>
 
-          <View className="mb-2">
+          <View className="mb-4">
             <TextInput
-              placeholder={
-                formErrors.email ? "Email is required" : "Enter email"
-              }
+              placeholder={formErrors.email || "Enter email"}
               value={form.email}
               onChangeText={(text) => updateForm("email", text)}
               keyboardType="email-address"
@@ -191,20 +164,11 @@ export default function Component() {
                   : "border-gray-300"
               }`}
             />
-            {formErrors.email && (
-              <Text className="text-red-500 text-sm mt-1">
-                {formErrors.email}
-              </Text>
-            )}
           </View>
 
-          <View className="mb-2">
+          <View className="mb-4">
             <TextInput
-              placeholder={
-                formErrors.phone_number
-                  ? "Phone number is required"
-                  : "Enter phone number"
-              }
+              placeholder={formErrors.phone_number || "Enter phone number"}
               value={form.phone_number}
               onChangeText={(text) => updateForm("phone_number", text)}
               keyboardType="phone-pad"
@@ -214,16 +178,11 @@ export default function Component() {
                   : "border-gray-300"
               }`}
             />
-            {formErrors.phone_number && (
-              <Text className="text-red-500 text-sm mt-1">
-                {formErrors.phone_number}
-              </Text>
-            )}
           </View>
 
-          <View className="mb-2">
+          <View className="mb-4">
             <TextInput
-              placeholder={formErrors.town ? "Town is required" : "Enter town"}
+              placeholder={formErrors.town || "Enter town"}
               value={form.town}
               onChangeText={(text) => updateForm("town", text)}
               className={`border p-3 rounded-lg ${
@@ -232,18 +191,11 @@ export default function Component() {
                   : "border-gray-300"
               }`}
             />
-            {formErrors.town && (
-              <Text className="text-red-500 text-sm mt-1">
-                {formErrors.town}
-              </Text>
-            )}
           </View>
 
-          <View className="mb-2">
+          <View className="mb-4">
             <TextInput
-              placeholder={
-                formErrors.password ? "Password is required" : "Enter password"
-              }
+              placeholder={formErrors.password || "Enter password"}
               value={form.password}
               onChangeText={(text) => updateForm("password", text)}
               secureTextEntry
@@ -253,11 +205,6 @@ export default function Component() {
                   : "border-gray-300"
               }`}
             />
-            {/* {formErrors.password && (
-              <Text className="text-red-500 text-sm mt-1">
-                {formErrors.password}
-              </Text>
-            )} */}
           </View>
 
           {error && (
